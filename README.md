@@ -1,6 +1,6 @@
 # Droid
  Screen living stupid multifunctional BB-8 droid
-
+ 
 ![frame_00_delay-0 03s](https://user-images.githubusercontent.com/52743561/159042481-4097b880-b2a8-4c00-9154-6c9bde6e2aa0.png)
 ![frame_12_delay-0 03s](https://user-images.githubusercontent.com/52743561/159042846-f6924883-5807-485a-bc59-d355af38325d.png)
 ![1](https://user-images.githubusercontent.com/52743561/159042658-c6b35a94-2543-4e71-814a-4fc09b793ad6.png)
@@ -9,10 +9,11 @@
 ![1](https://user-images.githubusercontent.com/52743561/159042712-c4cb29f5-ddb3-4192-a79e-570e2469149a.png)
 ![1](https://user-images.githubusercontent.com/52743561/159042725-645354ca-d75a-49a5-8de7-a4617e9c73e9.png)
 
-Available Features:
+# Features
+![Yes](https://user-images.githubusercontent.com/52743561/159052564-27e1f952-74ac-43a3-b89d-de606815d624.png) Available Features:
  + Following mouse
 
-Planned Features:
+![No](https://user-images.githubusercontent.com/52743561/159052587-e2273961-219a-4978-8867-96163479839a.png) Work on:
  - Sleeping by user click
  - Chaos Flying on screen
  - Hologram teleporting
