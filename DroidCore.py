@@ -7,7 +7,7 @@ import pyautogui as gui #Делать плохие вещи
 def tick(mode,args):
     if mode=="ChangeMode": #Попадаем сюда тогда, когда что то закончилось
         args=[None]
-        avalable_modes=7
+        avalable_modes=2
         rand=random.randint(0,avalable_modes-1)
 
         #Случайный выбор - что делать дальше
@@ -16,12 +16,12 @@ def tick(mode,args):
             print("Running")
             mode="Run"
             args=[None]
-        """
+
         elif rand==1:
             print("Flying")
             mode="Fly"
-            args[0]=0
-
+            args[0]=1
+        """
         elif rand==2:
             print("Hiding")
             mode="Hide"
@@ -48,6 +48,8 @@ def tick(mode,args):
             args=[None]
         """
     #--------------------------------------------------Modes--------------------------------------------------
+
+
 
     #--------------------------------------------------Следование за мышкой
     if mode=="Run":
@@ -77,8 +79,31 @@ def tick(mode,args):
 
 
 
+    #--------------------------------------------------Хаотичный полет
+    if mode=="Fly":
+        x_move,y_move=20, 30#Что-бы нашими координатами считалась середина окна а не верхний правый край
+        my_x,my_y=root.winfo_x()+x_move, root.winfo_y()+y_move #Абсолютные координаты центра окна
 
-    root.after(2, lambda mode=mode,args=args: tick(mode,args)) #Запускаем tick с начала
+        if args[0]>3:
+            args[0]-=3
+
+        img=PhotoImage(file=f"Sprites/Fly/{args[0]}.png")#Грузим костюм
+        args[0]+=1
+        canvas.image=img#Надо
+        canvas.create_image(x_move,y_move,image=img)#Рисуем на холсте по середине
+        x_m=random.randint(-1,1)
+        y_m=random.randint(-1,1)
+        if my_x+x_m < 1920 and my_x+x_m > 0 and my_y+y_m <1080 and my_y+y_m >0:
+            root.geometry(f"+{my_x-x_move+x_m}+{my_y-y_move+y_m}")
+
+        if random.randint(0,1000)==0:
+            mode="ChangeMode" #Если повезет - то завершаем действие
+
+
+
+
+
+    root.after(5, lambda mode=mode,args=args: tick(mode,args)) #Запускаем tick с начала
 
 #По катетам пр. треугольника найти угол
 #Или же найти угол направления по изменению X и Y
