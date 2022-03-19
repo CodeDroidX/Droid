@@ -1,5 +1,5 @@
 # Memory file
-*.droid
+*.mem
 
 # Log file
 *.log
