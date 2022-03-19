@@ -9,7 +9,12 @@
  + ![1](https://user-images.githubusercontent.com/52743561/159119671-eeed1dcc-c8e7-410b-a772-d5add83b7dff.png) Hologram teleporting
  + ![1](https://user-images.githubusercontent.com/52743561/159042688-a985d719-2109-4b38-824b-49374e8fccb9.png) Listening user and save voice as a text file (STT)
  + ![5](https://user-images.githubusercontent.com/52743561/159119685-ff61ec22-b3e9-4da8-bd6f-cbbca2d2ff5d.png) Print on keyboard text that user said sometime
-
+ + ![1](https://user-images.githubusercontent.com/52743561/159042673-95dc1e4d-b9b8-4a0b-ac0f-93e3411090b4.png) Say text that user said sometime (TTS)
+ 
 # Work on ![No](https://user-images.githubusercontent.com/52743561/159052587-e2273961-219a-4978-8867-96163479839a.png)
- - ![1](https://user-images.githubusercontent.com/52743561/159042673-95dc1e4d-b9b8-4a0b-ac0f-93e3411090b4.png) Say text that user said sometime (TTS)
+
  - ![1](https://user-images.githubusercontent.com/52743561/159042658-c6b35a94-2543-4e71-814a-4fc09b793ad6.png) Steal mouse cursor and run with it
+
+# How to use ![Info](https://user-images.githubusercontent.com/52743561/159122645-be799a09-149f-45b1-a8e6-523801d1bf60.png)
+ + **Установите модули которые используются в .py программе**
+ + **Скачайте FFmpeg и всё что к нему прилагается в папку с программой**
