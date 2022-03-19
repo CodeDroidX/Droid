@@ -5,9 +5,19 @@ import pyautogui as gui #Делать плохие вещи
 
 
 def tick(mode,args):
+
+    with open("Memory/SleepFlag.mem","r+") as f:
+        now=f.read()
+    if now=="Yes":
+        img=PhotoImage(file=f"Sprites/Afk/1.png")#Грузим костюм
+        canvas.image=img#Надо
+        canvas.create_image(20,30,image=img)#Рисуем на холсте по середине
+        root.after(5, lambda mode=mode,args=args: tick(mode,args))
+        return None
+
     if mode=="ChangeMode": #Попадаем сюда тогда, когда что то закончилось
         args=[None]
-        avalable_modes=2
+        avalable_modes=3
         rand=random.randint(0,avalable_modes-1)
 
         #Случайный выбор - что делать дальше
@@ -21,12 +31,12 @@ def tick(mode,args):
             print("Flying")
             mode="Fly"
             args[0]=1
-        """
+
         elif rand==2:
             print("Hiding")
             mode="Hide"
-            args=[None]
-
+            args[0]=1
+        """
         elif rand==3:
             print("Listening")
             mode="Listen"
@@ -99,6 +109,24 @@ def tick(mode,args):
         if random.randint(0,1000)==0:
             mode="ChangeMode" #Если повезет - то завершаем действие
 
+    #--------------------------------------------------Телепортация по экрану
+    if mode=="Hide":
+        x_move,y_move=20, 30#Что-бы нашими координатами считалась середина окна а не верхний правый край
+        my_x,my_y=root.winfo_x()+x_move, root.winfo_y()+y_move #Абсолютные координаты центра окна
+
+        if args[0]>5:
+            args[0]-=5
+
+        img=PhotoImage(file=f"Sprites/Hide/{args[0]}.png")#Грузим костюм
+        args[0]+=1
+        canvas.image=img#Надо
+        canvas.create_image(x_move,y_move,image=img)#Рисуем на холсте по середине
+
+        root.geometry(f"+{random.randint(0,1920)}+{random.randint(0,1080)}")
+
+        if random.randint(0,1000)==0:
+            mode="ChangeMode" #Если повезет - то завершаем действие
+
 
 
 
@@ -127,7 +155,17 @@ def GetAngle(x_diff,y_diff):
 
 
 
-
+def goto_sleep(event):
+    with open("Memory/SleepFlag.mem","r+") as f:
+        now=f.read()
+    if now!="Yes":
+        with open("Memory/SleepFlag.mem","w+") as f:
+            f.write("Yes")
+            print("Fell asleep")
+    if now=="Yes":
+        with open("Memory/SleepFlag.mem","w+") as f:
+            f.write("No")
+            print("Wake up")
 
 
 
@@ -149,9 +187,13 @@ root.wm_attributes("-transparentcolor", "blue") #Крутая фича - люб�
 frame = Frame(root,bd=0, highlightthickness=0) #Рамки на 0, свечение рамок на 0
 frame.pack()
 
+
 canvas = Canvas(frame, bg="blue", width=40, height=60, borderwidth = 0, highlightthickness=0) #Тоже рамки на 0
 #Задний фон будет СИНИЙ, 5 строчек назад сказано зачем.
 canvas.pack()
+
+
+root.bind("<Button-1>", goto_sleep)
 
 #Всё готово к запуску главной рекурсии
 

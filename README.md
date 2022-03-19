@@ -11,12 +11,12 @@
 
 # Features
 ![Yes](https://user-images.githubusercontent.com/52743561/159052564-27e1f952-74ac-43a3-b89d-de606815d624.png) Available Features:
+ + Sleeping by user click
  + Following mouse
  + Chaos Flying on screen
-
+ + Hologram teleporting
+ 
 ![No](https://user-images.githubusercontent.com/52743561/159052587-e2273961-219a-4978-8867-96163479839a.png) Work on:
- - Sleeping by user click
- - Hologram teleporting
  - Listening user and save voice as a text file (STT)
  - Say text that user said sometime (TTS)
  - Steal mouse cursor and run with it
