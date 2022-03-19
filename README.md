@@ -15,9 +15,8 @@
  + Following mouse
  + Chaos Flying on screen
  + Hologram teleporting
- 
+ + Listening user and save voice as a text file (STT)
+ + Print on keyboard text that user said sometime
 ![No](https://user-images.githubusercontent.com/52743561/159052587-e2273961-219a-4978-8867-96163479839a.png) Work on:
- - Listening user and save voice as a text file (STT)
  - Say text that user said sometime (TTS)
  - Steal mouse cursor and run with it
- - Print on keyboard text that user said sometime

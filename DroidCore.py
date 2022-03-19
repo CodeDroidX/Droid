@@ -1,8 +1,12 @@
 from tkinter import * #Основополагающий модуль
 import math #Считать син\кос для езды
 import random #Ну типо интеллект
-import pyautogui as gui #Делать плохие вещи
 
+import pyautogui as gui #Делать плохие вещи
+import pywinauto as wgui
+
+import speech_recognition as recog #Распознавание речи
+rec=recog.Recognizer()
 
 def tick(mode,args):
 
@@ -17,7 +21,7 @@ def tick(mode,args):
 
     if mode=="ChangeMode": #Попадаем сюда тогда, когда что то закончилось
         args=[None]
-        avalable_modes=3
+        avalable_modes=5
         rand=random.randint(0,avalable_modes-1)
 
         #Случайный выбор - что делать дальше
@@ -36,27 +40,29 @@ def tick(mode,args):
             print("Hiding")
             mode="Hide"
             args[0]=1
-        """
+
         elif rand==3:
             print("Listening")
             mode="Listen"
-            args=[None]
+            args[0]="FirstLoop"
 
         elif rand==4:
+            print("Typing")
+            mode="Type"
+            args[0]="FirstLoop"
+
+    """
+        elif rand==5:
             print("Playing")
             mode="Play"
             args=[None]
 
-        elif rand==5:
+        elif rand==6:
             print("Stealing")
             mode="Steal"
             args=[None]
 
-        elif rand==6:
-            print("Typing")
-            mode="Type"
-            args=[None]
-        """
+    """
     #--------------------------------------------------Modes--------------------------------------------------
 
 
@@ -127,11 +133,52 @@ def tick(mode,args):
         if random.randint(0,1000)==0:
             mode="ChangeMode" #Если повезет - то завершаем действие
 
+    #--------------------------------------------------Подлое подслушивание твоей речи
+    if mode=="Listen":
+        x_move,y_move=20, 30#Что-бы нашими координатами считалась середина окна а не верхний правый край
+
+        img=PhotoImage(file=f"Sprites/Listen/1.png")#Грузим костюм
+        canvas.image=img#Надо
+        canvas.create_image(x_move,y_move,image=img)#Рисуем на холсте по середине
+
+
+        if args[0]=="FirstLoop":
+            args[0]="NotFirstLoop"
+        else:
+            text=ListenUser()
+            if text!="":
+                with open("Memory/Memory.mem","a+", encoding='utf-8') as f:
+                    f.write("\n"+text.strip())
+            mode="ChangeMode" #Завершаем действие
+
+    #--------------------------------------------------Печать на клавиатуре чего-то из памяти
+    if mode=="Type":
+        x_move,y_move=20, 30#Что-бы нашими координатами считалась середина окна а не верхний правый край
+
+        img=PhotoImage(file=f"Sprites/Type/{random.randint(1,6)}.png")#Грузим костюм
+        canvas.image=img#Надо
+        canvas.create_image(x_move,y_move,image=img)#Рисуем на холсте по середине
+
+        if args[0]=="FirstLoop":
+            with open("Memory/Memory.mem","r", encoding='utf-8') as f:
+                data=f.readlines()
+            word=random.choice(data).strip()
+            while word=="":
+                word=random.choice(data).strip()
+            args[0]=word
+        else:
+            if args[0]!="":
+                print(args[0][0])
+                wgui.keyboard.send_keys(args[0][0])
+                args[0]=args[0][1:]
+            else:
+                mode="ChangeMode" #Завершаем действие
 
 
 
 
-    root.after(5, lambda mode=mode,args=args: tick(mode,args)) #Запускаем tick с начала
+
+    root.after(2, lambda mode=mode,args=args: tick(mode,args)) #Запускаем tick с начала
 
 #По катетам пр. треугольника найти угол
 #Или же найти угол направления по изменению X и Y
@@ -150,8 +197,19 @@ def GetAngle(x_diff,y_diff):
 
 
 
+def ListenUser():
 
-
+    with recog.Microphone() as source:
+        #rec.adjust_for_ambient_noise(source, duration=1) #Если нужно шумоподаление
+        try:
+            audio = rec.listen(source,timeout=10)
+        except:
+            return ""
+    try:
+        text=rec.recognize_google(audio, language="ru-RU") #Можно выбрать язык
+    except:
+        return ""
+    return text
 
 
 
