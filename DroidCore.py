@@ -3,9 +3,10 @@ import math #Считать син\кос для езды
 import random #Ну типо интеллект
 import os
 import threading
-
+import ctypes
 import pyautogui as gui #Делать плохие вещи
 import pywinauto as wgui
+import requests
 
 import speech_recognition as recog #Распознавание речи
 rec=recog.Recognizer()
@@ -33,7 +34,7 @@ def tick(mode,args):
 
     if mode=="ChangeMode": #Попадаем сюда тогда, когда что то закончилось
         args=[None]
-        avalable_modes=6
+        avalable_modes=7
         rand=random.randint(0,avalable_modes-1)
 
         #Случайный выбор - что делать дальше
@@ -66,6 +67,11 @@ def tick(mode,args):
         elif rand==5:
             print("Playing")
             mode="Play"
+            args[0]="FirstLoop"
+
+        elif rand==6:
+            print("Joke")
+            mode="Joke"
             args[0]="FirstLoop"
     """
         elif rand==6:
@@ -203,12 +209,33 @@ def tick(mode,args):
         elif not args[0].is_alive():
             mode="ChangeMode" #Завершаем действие
 
+    #--------------------------------------------------ОТКРЫВАЕМ БОЧКУ И НАЧИНАЕМ ОРАТЬ ДЕТСКИМ ГОЛОСОМ ЧТО КОТЛЕТКИ ГОТОВЫ
+    if mode=="Joke":
+        x_move,y_move=20, 30#Что-бы нашими координатами считалась середина окна а не верхний правый край
+
+        img=PhotoImage(file=f"Sprites/Readme/Info.png")#Грузим костюм
+        canvas.image=img#Надо
+        canvas.create_image(x_move,y_move,image=img)#Рисуем на холсте по середине
+
+        if args[0]=="FirstLoop":
+            args[0]="NotFirstLoop"
+        else:
+            random_chuck_norries_joke()
+            mode="ChangeMode" #Завершаем действие
+
 
 
 
 
 
     root.after(2, lambda mode=mode,args=args: tick(mode,args)) #Запускаем tick с начала
+
+
+def random_chuck_norries_joke():
+    joke=requests.get("https://geek-jokes.sameerkumar.website/api?format=json").json()["joke"]
+    joke=translator.translate(joke, dest="ru").text
+    ctypes.windll.user32.MessageBoxW(0,joke, "Droid:", 0)
+
 
 #По катетам пр. треугольника найти угол
 #Или же найти угол направления по изменению X и Y
