@@ -180,7 +180,7 @@ def tick(mode,args):
         else:
             if args[0]!="":
                 print(args[0][0])
-                wgui.keyboard.send_keys(args[0][0])
+                wgui.keyboard.send_keys(args[0][0], with_spaces=True)
                 args[0]=args[0][1:]
             else:
                 mode="ChangeMode" #Завершаем действие
