@@ -1,12 +1,24 @@
 from tkinter import * #Основополагающий модуль
 import math #Считать син\кос для езды
 import random #Ну типо интеллект
+import os
+import threading
 
 import pyautogui as gui #Делать плохие вещи
 import pywinauto as wgui
 
 import speech_recognition as recog #Распознавание речи
 rec=recog.Recognizer()
+
+#ТТС от гугла - в разы приятнее pyttsx3
+#А espeak и Rhvoice это вообще исчадия ада
+from gtts import gTTS as gt
+#Пайдаб-это костыль для изменения тембра
+from googletrans import Translator
+translator = Translator() #Вроде это лишнее, но он поможет нам в распознавании языка для TTS
+from pydub import AudioSegment
+import simpleaudio
+from pydub.playback import play #Ну, и за одно звук им проигрывать можно
 
 def tick(mode,args):
 
@@ -21,7 +33,7 @@ def tick(mode,args):
 
     if mode=="ChangeMode": #Попадаем сюда тогда, когда что то закончилось
         args=[None]
-        avalable_modes=5
+        avalable_modes=6
         rand=random.randint(0,avalable_modes-1)
 
         #Случайный выбор - что делать дальше
@@ -51,12 +63,11 @@ def tick(mode,args):
             mode="Type"
             args[0]="FirstLoop"
 
-    """
         elif rand==5:
             print("Playing")
             mode="Play"
-            args=[None]
-
+            args[0]="FirstLoop"
+    """
         elif rand==6:
             print("Stealing")
             mode="Steal"
@@ -174,6 +185,25 @@ def tick(mode,args):
             else:
                 mode="ChangeMode" #Завершаем действие
 
+    #--------------------------------------------------ОТКРЫВАЕМ БОЧКУ И НАЧИНАЕМ ОРАТЬ ДЕТСКИМ ГОЛОСОМ ЧТО КОТЛЕТКИ ГОТОВЫ
+    if mode=="Play":
+        x_move,y_move=20, 30#Что-бы нашими координатами считалась середина окна а не верхний правый край
+
+        img=PhotoImage(file=f"Sprites/Play/1.png")#Грузим костюм
+        canvas.image=img#Надо
+        canvas.create_image(x_move,y_move,image=img)#Рисуем на холсте по середине
+
+        if args[0]=="FirstLoop":
+            with open("Memory/Memory.mem","r", encoding='utf-8') as f:
+                data=f.readlines()
+            word=random.choice(data).strip()
+            while word=="":
+                word=random.choice(data).strip()
+            args[0]=say(word)
+        elif not args[0].is_alive():
+            mode="ChangeMode" #Завершаем действие
+
+
 
 
 
@@ -198,7 +228,6 @@ def GetAngle(x_diff,y_diff):
 
 
 def ListenUser():
-
     with recog.Microphone() as source:
         #rec.adjust_for_ambient_noise(source, duration=1) #Если нужно шумоподаление
         try:
@@ -211,8 +240,36 @@ def ListenUser():
         return ""
     return text
 
+def lang_detect(text): #Собственно, спрашиваем у переводчика язык
+    return translator.translate(text).src
 
+def gen_wav_TTS(text):
 
+    tts = gt(text=text,lang=lang_detect(text))
+    with open("cache.mp3","wb") as fp:
+        tts.write_to_fp(fp)
+
+def say_TTS():
+    octaves=0.3
+    try:
+        sound = AudioSegment.from_file('cache.mp3', format="mp3")
+    except FileNotFoundError:
+        raise FileNotFoundError("Download ffmpeg.exe,ffplay.exe into your program path, or install it in system")
+    os.remove('cache.mp3')
+
+    new_rate = int(sound.frame_rate * (2.0 ** octaves))
+
+    new_sound = sound._spawn(sound.raw_data, overrides={'frame_rate': new_rate})
+
+    pitched_sound = new_sound.set_frame_rate(44100)
+
+    play(pitched_sound)
+
+def say(text):#Обертка для say_TTS
+    gen_wav_TTS(text)
+    th=threading.Thread(target=say_TTS)
+    th.start()
+    return th
 def goto_sleep(event):
     with open("Memory/SleepFlag.mem","r+") as f:
         now=f.read()
@@ -255,6 +312,6 @@ root.bind("<Button-1>", goto_sleep)
 
 #Всё готово к запуску главной рекурсии
 
-root.after(2, lambda mode="ChangeMode",args=[None]: tick(mode,args))#Вот он
+root.after(2, lambda mode="Run",args=[None]: tick(mode,args))#Вот он
 
 root.mainloop()#Запускаем приложение
