@@ -8,7 +8,8 @@
  + ![Info](https://user-images.githubusercontent.com/52743561/159122645-be799a09-149f-45b1-a8e6-523801d1bf60.png) Tells you stupid geeks joke.
  
  ![image](https://user-images.githubusercontent.com/52743561/159128220-7ed3b05f-5e68-45a9-b39b-98ab109789a2.png)
-
+ + ![1](https://user-images.githubusercontent.com/52743561/159146321-2db656a0-5417-4e6f-a390-dbece9ab1935.png) Blocking cursor in one position
+ + ![8](https://user-images.githubusercontent.com/52743561/159146286-a303e7f7-089d-4d54-9358-8ec71b669f97.png) Teleporting cursor on screen
  + ![1](https://user-images.githubusercontent.com/52743561/159042712-c4cb29f5-ddb3-4192-a79e-570e2469149a.png) Chaos Flying on screen
  + ![1](https://user-images.githubusercontent.com/52743561/159119671-eeed1dcc-c8e7-410b-a772-d5add83b7dff.png) Hologram teleporting
  + ![1](https://user-images.githubusercontent.com/52743561/159126365-365312c1-46c6-4ee2-985d-1ae1b93cdee7.png) Listening user and save voice as a text file (STT)
