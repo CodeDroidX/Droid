@@ -34,7 +34,7 @@ def tick(mode,args):
 
     if mode=="ChangeMode": #Попадаем сюда тогда, когда что то закончилось
         args=[None]
-        avalable_modes=7
+        avalable_modes=9
         rand=random.randint(0,avalable_modes-1)
 
         #Случайный выбор - что делать дальше
@@ -73,6 +73,16 @@ def tick(mode,args):
             print("Joke")
             mode="Joke"
             args[0]="FirstLoop"
+
+        elif rand==7:
+            print("Blocking")
+            mode="Block"
+            args=list(gui.position())
+
+        elif rand==8:
+            print("Mouse Teleporting")
+            mode="Telep"
+            args=[1,1]
     """
         elif rand==6:
             print("Stealing")
@@ -145,7 +155,8 @@ def tick(mode,args):
         canvas.image=img#Надо
         canvas.create_image(x_move,y_move,image=img)#Рисуем на холсте по середине
 
-        root.geometry(f"+{random.randint(0,1920)}+{random.randint(0,1080)}")
+        if random.randint(0,10)==0:
+            root.geometry(f"+{random.randint(0,1920)}+{random.randint(0,1080)}")
 
         if random.randint(0,1000)==0:
             mode="ChangeMode" #Если повезет - то завершаем действие
@@ -209,7 +220,7 @@ def tick(mode,args):
         elif not args[0].is_alive():
             mode="ChangeMode" #Завершаем действие
 
-    #--------------------------------------------------ОТКРЫВАЕМ БОЧКУ И НАЧИНАЕМ ОРАТЬ ДЕТСКИМ ГОЛОСОМ ЧТО КОТЛЕТКИ ГОТОВЫ
+    #--------------------------------------------------Шутки про чака норриса
     if mode=="Joke":
         x_move,y_move=20, 30#Что-бы нашими координатами считалась середина окна а не верхний правый край
 
@@ -223,7 +234,39 @@ def tick(mode,args):
             random_chuck_norries_joke()
             mode="ChangeMode" #Завершаем действие
 
+    #--------------------------------------------------Телепортация мыши по экрану
+    if mode=="Telep":
+        x_move,y_move=20, 30#Что-бы нашими координатами считалась середина окна а не верхний правый край
+        my_x,my_y=root.winfo_x()+x_move, root.winfo_y()+y_move #Абсолютные координаты центра окна
+        args[0]+=args[1]
 
+        if args[0]==8:
+            args[1]=-1
+        if args[0]==1:
+            args[1]=1
+
+        img=PhotoImage(file=f"Sprites/Reactor/{args[0]}.png")#Грузим костюм
+        canvas.image=img#Надо
+        canvas.create_image(x_move,y_move,image=img)#Рисуем на холсте по середине
+
+        gui.moveTo(random.randint(0,1920),random.randint(0,1080))
+
+        if random.randint(0,700)==0:
+            mode="ChangeMode" #Если повезет - то завершаем действие
+
+    #--------------------------------------------------Блокировка курсора
+    if mode=="Block":
+        x_move,y_move=20, 30#Что-бы нашими координатами считалась середина окна а не верхний правый крайне
+        my_x,my_y=root.winfo_x()+x_move, root.winfo_y()+y_move #Абсолютные координаты центра окна
+
+        img=PhotoImage(file=f"Sprites/Block/1.png")#Грузим костюм
+        canvas.image=img#Надо
+        canvas.create_image(x_move,y_move,image=img)#Рисуем на холсте по середине
+
+        gui.moveTo(args[0],args[1])
+
+        if random.randint(0,700)==0:
+            mode="ChangeMode" #Если повезет - то завершаем действие
 
 
 
